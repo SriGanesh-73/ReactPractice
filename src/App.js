@@ -1,25 +1,45 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from 'react';
+import GroceryShop from './pages/groceryShop';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Hero from './components/Hero';
+import Menu from './components/Menu';
+import TableBookingForm from './pages/TableBooking';  
+import SignupForm from './pages/Login';
+import AboutUs from './pages/AboutUs';  
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const loggedUser = JSON.parse(localStorage.getItem('user'));
+    if (loggedUser) {
+      setUser(loggedUser);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navbar />
+      {user ? (
+        <button onClick={handleLogout}>Logout</button>
+      ) : (
+        <SignupForm />
+      )}
+      <Hero />
+      <Menu />
+      <AboutUs />
+      {user && <TableBookingForm />}
+      <Footer />
     </div>
   );
 }
+
 
 export default App;
